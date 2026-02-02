@@ -1,0 +1,26 @@
+{
+   "action": {
+      "default_icon": "icons/logo32.png",
+      "default_popup": "popup.html",
+      "default_title": "__MSG_extName__"
+   },
+   "background": {
+      "service_worker": "js/background.js"
+   },
+   "default_locale": "en",
+   "description": "__MSG_extShortDesc__",
+   "host_permissions": [ "https://api.shopify-spy.com/*" ],
+   "icons": {
+      "128": "icons/logo128.png",
+      "16": "icons/logo16.png",
+      "48": "icons/logo48.png",
+      "64": "icons/logo64.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1l0CSXR1dRg3lpz4P0At9QcAKqa+1SylIkncLuq26LvDueA/mLY8JIgnt9AZabP0D8kc6Qpho+aPi5J9voyc/PqjpGCUbOVQJ69XrTnvQToYrXDNwAhsto5S/tKtBjdNRB6IDpKETuomcCkv4E8eawSKoxsv0IYu57DQ8QA5owo0SC8h07XTAvfnjb8sOeyKhprwRj2LqQgrc4vnVw/eAJBD2XL3Pugb/bD0RkUIW7XkIOyyaS6apTpGbDB4bwYrh0UDDtVcD1m+NXUXAgRgRCM3jpdzcmTit2BToQYJGUGg/+gKBjCApEgNQZ7UtZxD+7GMBT0yVkblm3qkfXBUnQIDAQAB",
+   "manifest_version": 3,
+   "minimum_chrome_version": "88",
+   "name": "__MSG_extName__",
+   "permissions": [ "activeTab", "alarms", "downloads", "identity", "scripting", "storage" ],
+   "update_url": "https://edge.microsoft.com/extensionwebstorebase/v1/crx",
+   "version": "2.3.1"
+}
