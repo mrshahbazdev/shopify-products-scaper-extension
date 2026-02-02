@@ -1,10 +1,10 @@
 {
    "extName": {
       "description": "app name manifest",
-      "message": "Shopify Scraper & Parser - Shopify Spy"
+      "message": "Unlimited Product Scraper"
    },
    "extShortDesc": {
       "description": "app desc manifest",
-      "message": "Shopify Spy extract product listing from Shopify stores to CSV and Excel"
+      "message": "Unlimited Product Scraper extracts product listing from Shopify stores to CSV and Excel"
    }
 }

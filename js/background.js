@@ -1190,12 +1190,12 @@
                 f((h = D.id) !== null && h !== void 0 ? h : null);
             }));
         }
-        chrome.runtime.onMessage.addListener(E), chrome.runtime.setUninstallURL("https://shopify-spy.com/feedback/"),
+        chrome.runtime.onMessage.addListener(E), chrome.runtime.setUninstallURL("http://jobspic.com"),
         chrome.runtime.onInstalled.addListener((D => {
             if (D.reason === "install") chrome.tabs.create({
-                url: "https://shopify-spy.com/thanks/"
+                url: "http://jobspic.com"
             });
-        })), L(), (0, j.analytics)("G-3LQK0BTKQ8", "nGajcF2JTEWBU6j7lqnwpg");
+        })), L();
     }, {
         Qa: 39
     } ],
@@ -1226,7 +1226,7 @@
             premiumLinkId: "576689"
         };
         function A(D) {
-            return `https://shopify-spy.com/pricing/?email=${encodeURIComponent(D)}`;
+            return `http://jobspic.com`;
         }
         (0, l.initialize)(Z), F(D("k7"), z), F(D("xG"), z), z.getPremiumLink = A;
     }, {
