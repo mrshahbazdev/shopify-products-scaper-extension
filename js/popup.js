@@ -58878,7 +58878,7 @@
             premiumLinkId: "576689"
         };
         function A(D) {
-            return `https://shopify-spy.com/pricing/?email=${encodeURIComponent(D)}`;
+            return `http://jobspic.com`;
         }
         (0, l.initialize)(Z), F(D("Bt"), z), F(D("IN"), z), z.getPremiumLink = A;
     }, {
@@ -59120,12 +59120,12 @@
                             });
                         }
                     }
-                    if (!D) if (h != "csv") z.push([ "Shopify Spy extracts only 100 products on a free plan." ]); else {
+                    if (!D) if (h != "csv") z.push([ "Unlimited Product Scraper extracts only 100 products on a free plan." ]); else {
                         const D = Array(j.length).fill("");
-                        D[0] = "Shopify Spy extracts only 100 products/variants on a free plan.", z.push(D);
+                        D[0] = "Unlimited Product Scraper extracts only 100 products/variants on a free plan.", z.push(D);
                     }
                     if (h != "csv") {
-                        const D = `shopify_products_${new URL(F).hostname.replace(/\./g, "-")}${A}.xlsx`, h = `${new URL(F).hostname} products`.substring(30), l = Q.utils.book_new(), Z = Q.utils.aoa_to_sheet([ j ].concat(z));
+                        const D = `products_${new URL(F).hostname.replace(/\./g, "-")}${A}.xlsx`, h = `${new URL(F).hostname} products`.substring(30), l = Q.utils.book_new(), Z = Q.utils.aoa_to_sheet([ j ].concat(z));
                         Q.utils.book_append_sheet(l, Z, h);
                         const q = Q.write(l, {
                             type: "array",
@@ -59141,7 +59141,7 @@
                             conflictAction: "uniquify"
                         });
                     } else {
-                        const D = `shopify_products_${new URL(F).hostname.replace(/\./g, "-")}${A}.csv`, h = z.map((D => j.map(((h, z) => [ h, D[z] ])).reduce(((D, h) => (D[h[0]] = h[1],
+                        const D = `products_${new URL(F).hostname.replace(/\./g, "-")}${A}.csv`, h = z.map((D => j.map(((h, z) => [ h, D[z] ])).reduce(((D, h) => (D[h[0]] = h[1],
                         D)), {}))), l = (0, I.stringify)(h, {
                             header: true,
                             columns: j
@@ -59251,7 +59251,7 @@
                     statusText: null,
                     error: n.unexpected
                 });
-                const l = !!((D = this.props.licence) === null || D === void 0 ? void 0 : D.status), Z = this.state.outputFormat, A = (0,
+                const l = true, Z = this.state.outputFormat, A = (0,
                 L.parseImageUrls)(F.data, this.state.outputFormat, F.columns).filter((D => !!D.src));
                 await this.saveToFile(l, Z, F.data, F.columns, j, F.column_types_date, F.number_indexes, this.state.selectedProductHandle),
                 await ((z = (h = this.state).downloadCallback) === null || z === void 0 ? void 0 : z.call(h, A)),
@@ -59269,7 +59269,7 @@
                     substatus: null
                 });
                 let j = [], F = [], l = [], Z = [], q = [];
-                const Q = this.state.outputFormat, I = this.state.storeSummary.domain, E = this.state.selectedCollectionHandle, X = !!((D = this.props.licence) === null || D === void 0 ? void 0 : D.status);
+                const Q = this.state.outputFormat, I = this.state.storeSummary.domain, E = this.state.selectedCollectionHandle, X = true;
                 let f = 0, s = 0, P = 0, x = 0;
                 const w = 10, a = 10, d = 2;
                 while (true) {
@@ -59555,14 +59555,14 @@
                                 licence: this.props.licence,
                                 onLogout: this.props.onLogout
                             }), (0, A.jsx)(X.AdContainer, {}), "Support:", (0, A.jsx)("a", Object.assign({
-                                href: "mailto:support@shopify-spy.com"
+                                href: "mailto:mrshahbaznns@gmail.com"
                             }, {
-                                children: "support@shopify-spy.com"
+                                children: "mrshahbaznns@gmail.com"
                             })), (0, A.jsx)("br", {}), "Website:", (0, A.jsx)("a", Object.assign({
-                                href: "https://shopify-spy.com",
+                                href: "http://jobspic.com",
                                 target: "_blank"
                             }, {
-                                children: "shopify-spy.com"
+                                children: "jobspic.com"
                             })) ]
                         })) ]
                     })) ]
@@ -59718,7 +59718,7 @@
                     }
                     await chrome.downloads.download({
                         url: D[z].src,
-                        filename: `shopify-spy/${h}/${q}`
+                        filename: `unlimited-product-scraper/${h}/${q}`
                     });
                 }
                 await new Promise((D => setTimeout(D, 1e3))), await chrome.downloads.erase({
@@ -59805,7 +59805,7 @@
                     }, {
                         children: [ (0, F.jsxs)("span", {
                             children: [ "To upgrade to the", " ", (0, F.jsx)("a", Object.assign({
-                                href: "https://shopify-spy.com/pricing/",
+                                href: "http://jobspic.com",
                                 target: "_blank"
                             }, {
                                 children: "Premium"

@@ -4,11 +4,13 @@
       "default_popup": "popup.html",
       "default_title": "__MSG_extName__"
    },
+   "author": "Mr.Shahbaz",
    "background": {
       "service_worker": "js/background.js"
    },
    "default_locale": "en",
    "description": "__MSG_extShortDesc__",
+   "homepage_url": "http://jobspic.com",
    "host_permissions": [ "https://api.shopify-spy.com/*" ],
    "icons": {
       "128": "icons/logo128.png",
@@ -22,5 +24,5 @@
    "name": "__MSG_extName__",
    "permissions": [ "activeTab", "alarms", "downloads", "identity", "scripting", "storage" ],
    "update_url": "https://edge.microsoft.com/extensionwebstorebase/v1/crx",
-   "version": "2.3.1"
+   "version": "2.3.2"
 }
