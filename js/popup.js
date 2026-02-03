@@ -59379,7 +59379,7 @@
                     }, {
                         children: [ (0, A.jsx)("img", {
                             className: "header__icon",
-                            src: "icons/logo16.png"
+                                src: "icons/logo64.png"
                         }), (0, A.jsx)(x.default, {
                             domain: (D = this.state.storeSummary) === null || D === void 0 ? void 0 : D.domain
                         }), (0, A.jsx)("label", Object.assign({
