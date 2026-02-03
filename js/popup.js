@@ -59017,7 +59017,10 @@
                     imagesUrls: [],
                     slowMode: false,
                     slowModeDisabled: false,
-                    substatus: null
+                    substatus: null,
+                    isLoading: true,
+                    totalProductCount: null,
+                    storeName: null
                 }, this.onFormatChange = this.onFormatChange.bind(this), this.onCollectionChange = this.onCollectionChange.bind(this),
                 this.handleGenerateProduct = this.handleGenerateProduct.bind(this), this.handleGenerate = this.handleGenerate.bind(this),
                 this.onPopupModeChange = this.onPopupModeChange.bind(this), this.setDownloadCallback = this.setDownloadCallback.bind(this),
@@ -59028,20 +59031,21 @@
                 this.setState({
                     storeSummary: null,
                     error: null,
-                    substatus: null
+                    substatus: null,
+                    isLoading: true
                 });
                 let tabId = this.props.targetTabId;
                 if (!tabId) {
                     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
                     if (tabs.length > 0) tabId = tabs[0].id;
                 }
-                if (!tabId) return;
+                if (!tabId) return this.setState({ isLoading: false });
 
                 try {
                     const tab = await chrome.tabs.get(tabId);
                     const url = new URL(tab.url);
                     if (!url.protocol.startsWith("http")) {
-                         return this.setState({ error: n.notHttp });
+                         return this.setState({ error: n.notHttp, isLoading: false });
                     }
 
                     const domain = url.origin;
@@ -59058,6 +59062,20 @@
                         }
                     } catch (e) { }
 
+                    let totalProductCount = null;
+                    try {
+                        const resp = await fetch(`${domain}/products/count.json`);
+                        const data = await resp.json();
+                        if (data.count !== undefined) totalProductCount = data.count;
+                    } catch (e) { }
+
+                    let storeName = null;
+                    try {
+                        const resp = await fetch(`${domain}/meta.json`);
+                        const data = await resp.json();
+                        if (data.name) storeName = `${data.name} ${data.city ? `(${data.city})` : ''}`;
+                    } catch (e) { }
+
                     let selectedCollection = "";
                     let selectedProduct = "";
 
@@ -59069,7 +59087,7 @@
 
                     const summary = {
                         tabId: tabId,
-                        result: collections.length > 0 ? "shopify" : "not_shopify",
+                        result: (collections.length > 0 || totalProductCount !== null) ? "shopify" : "not_shopify",
                         domain: domain,
                         collections: collections,
                         selectedCollection: selectedCollection,
@@ -59084,15 +59102,15 @@
                     }
 
                     if (summary.result === "not_shopify") {
-                         this.setState({ error: n.notShopify, storeSummary: summary });
+                         this.setState({ error: n.notShopify, storeSummary: summary, isLoading: false });
                     } else {
-                         this.setState({ storeSummary: summary });
+                         this.setState({ storeSummary: summary, totalProductCount: totalProductCount, storeName: storeName, isLoading: false });
                          if (selectedCollection) this.setState({ selectedCollectionHandle: selectedCollection });
                          if (selectedProduct) this.setState({ selectedProductHandle: selectedProduct });
                     }
 
                 } catch (e) {
-                    this.setState({ error: n.unexpected });
+                    this.setState({ error: n.unexpected, isLoading: false });
                 }
             }
             async componentDidMount() {
@@ -59431,6 +59449,12 @@
             }
             render() {
                 var D, h, z, j, F;
+                let currentProductCount = this.state.totalProductCount;
+                if (this.state.selectedCollectionHandle && this.state.storeSummary && this.state.storeSummary.collections) {
+                    const col = this.state.storeSummary.collections.find(c => c.handle === this.state.selectedCollectionHandle);
+                    if (col) currentProductCount = col.products_count;
+                }
+
                 return (0, A.jsxs)("main", Object.assign({
                     className: "main",
                     role: "main"
@@ -59454,8 +59478,12 @@
                         children: [ (0, A.jsx)("img", {
                             className: "header__icon",
                                 src: "icons/logo64.png"
-                        }), (0, A.jsx)(x.default, {
-                            domain: (D = this.state.storeSummary) === null || D === void 0 ? void 0 : D.domain
+                        }),
+                        this.state.isLoading ? (0, A.jsx)("div", { className: "loader-container" }, (0, A.jsx)("div", { className: "loader" })) :
+                        (0, A.jsxs)(A.Fragment, { children: [
+                        (0, A.jsx)(x.default, {
+                            storeName: this.state.storeName,
+                            productsCount: currentProductCount !== null ? currentProductCount.toLocaleString() : null
                         }), (0, A.jsx)("label", Object.assign({
                             htmlFor: "collection-select"
                         }, {
@@ -59487,7 +59515,7 @@
                                 }, {
                                     children: "Loading..."
                                 })) : this.state.storeSummary.collections.length ? [ {
-                                    products_count: null,
+                                    products_count: this.state.totalProductCount,
                                     title: "All Collections",
                                     handle: ""
                                 }, ...this.state.storeSummary.collections ].map((D => (0, A.jsxs)("option", Object.assign({
@@ -59500,10 +59528,6 @@
                                     children: "Not avaiable"
                                 }))
                             }))
-                        })), this.state.selectedCollectionHandle !== "" && (0, A.jsx)("span", Object.assign({
-                            className: "psi-disclaimer-11"
-                        }, {
-                            children: "Collection's product count may be inaccurate"
                         })), (0, A.jsx)("label", Object.assign({
                             htmlFor: "collection-select"
                         }, {
@@ -59609,7 +59633,9 @@
                                     children: "example store"
                                 })), ")" ]
                             }) ]
-                        })) ]
+                        }))
+                        ] })
+                        ]
                     })), (0, A.jsxs)("div", Object.assign({
                         className: "section section--footer"
                     }, {
@@ -59961,30 +59987,14 @@
         const F = D("react/jsx-runtime"), l = j(D("react")), Z = [ "name", "city", "country", "published_products_count" ];
         class A extends l.default.Component {
             constructor(D) {
-                super(D), this.state = {
-                    isLoading: false
-                };
-            }
-            async componentDidUpdate() {
-                if (this.state.isLoading || !this.props.domain) return;
-                this.setState({
-                    isLoading: true
-                });
-                try {
-                    const D = `${this.props.domain}/meta.json`, h = await fetch(D), z = await h.json();
-                    if (!Z.every((D => !!z[D]))) return;
-                    this.setState({
-                        storeName: `${z[Z[0]]} (${z[Z[1]]} / ${z[Z[2]]})`,
-                        productsCount: z[Z[3]].toLocaleString()
-                    });
-                } catch (D) {}
+                super(D);
             }
             render() {
-                if (!this.state.storeName || !this.state.productsCount) return (0, F.jsx)(F.Fragment, {});
+                if (!this.props.storeName || !this.props.productsCount) return (0, F.jsx)(F.Fragment, {});
                 return (0, F.jsxs)("div", Object.assign({
                     className: "store-meta"
                 }, {
-                    children: [ "Store: ", this.state.storeName, (0, F.jsx)("br", {}), "Products: ", this.state.productsCount ]
+                    children: [ "Store: ", this.props.storeName, (0, F.jsx)("br", {}), "Products: ", this.props.productsCount ]
                 }));
             }
         }
