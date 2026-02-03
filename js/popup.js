@@ -58974,7 +58974,7 @@
         Object.defineProperty(z, "__esModule", {
             value: true
         });
-        const A = D("react/jsx-runtime"), q = Z(D("react")), Q = l(D("xlsx")), I = D("csv-stringify/dist/cjs/sync.cjs"), E = D("react-feather"), X = D("R8"), f = D("nm"), s = D("kR"), L = D("8p"), P = D("1c"), x = Z(D("jF"));
+        const A = D("react/jsx-runtime"), q = Z(D("react")), Q = l(D("xlsx")), I = D("csv-stringify/dist/cjs/sync.cjs"), E = D("react-feather"), L = D("8p"), P = D("1c"), x = Z(D("jF"));
         var n;
         (function(D) {
             D[D["empty"] = 0] = "empty", D[D["notShopify"] = 1] = "notShopify", D[D["notHttp"] = 2] = "notHttp",
@@ -59030,21 +59030,70 @@
                     error: null,
                     substatus: null
                 });
-                const D = await chrome.runtime.sendMessage({
-                    type: "tabStoreSummary",
-                    tabId: this.props.targetTabId
-                });
-                let h = null;
-                if (D.result === "no_access") h = n.notHttp; else if (D.result === "no_access_password") h = n.passwordProtected; else if (D.result === "not_shopify") h = n.notShopify;
-                if (this.setState({
-                    storeSummary: D,
-                    error: h
-                }), D.selectedCollection) this.setState({
-                    selectedCollectionHandle: D.selectedCollection
-                });
-                if (D.selectedProduct) this.setState({
-                    selectedProductHandle: D.selectedProduct
-                });
+                let tabId = this.props.targetTabId;
+                if (!tabId) {
+                    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+                    if (tabs.length > 0) tabId = tabs[0].id;
+                }
+                if (!tabId) return;
+
+                try {
+                    const tab = await chrome.tabs.get(tabId);
+                    const url = new URL(tab.url);
+                    if (!url.protocol.startsWith("http")) {
+                         return this.setState({ error: n.notHttp });
+                    }
+
+                    const domain = url.origin;
+                    let collections = [];
+                    try {
+                        const resp = await fetch(`${domain}/collections.json?limit=250`);
+                        const data = await resp.json();
+                        if (data.collections) {
+                           collections = data.collections.map(c => ({
+                               handle: c.handle,
+                               title: c.title,
+                               products_count: c.products_count
+                           }));
+                        }
+                    } catch (e) { }
+
+                    let selectedCollection = "";
+                    let selectedProduct = "";
+
+                    const colMatch = url.pathname.match(/\/collections\/([^/]+)/);
+                    if (colMatch) selectedCollection = colMatch[1];
+
+                    const prodMatch = url.pathname.match(/\/products\/([^/]+)/);
+                    if (prodMatch) selectedProduct = prodMatch[1];
+
+                    const summary = {
+                        tabId: tabId,
+                        result: collections.length > 0 ? "shopify" : "not_shopify",
+                        domain: domain,
+                        collections: collections,
+                        selectedCollection: selectedCollection,
+                        selectedProduct: selectedProduct
+                    };
+
+                    if (summary.result !== "shopify") {
+                         try {
+                             const pResp = await fetch(`${domain}/products.json?limit=1`);
+                             if (pResp.ok) summary.result = "shopify";
+                         } catch(e) {}
+                    }
+
+                    if (summary.result === "not_shopify") {
+                         this.setState({ error: n.notShopify, storeSummary: summary });
+                    } else {
+                         this.setState({ storeSummary: summary });
+                         if (selectedCollection) this.setState({ selectedCollectionHandle: selectedCollection });
+                         if (selectedProduct) this.setState({ selectedProductHandle: selectedProduct });
+                    }
+
+                } catch (e) {
+                    this.setState({ error: n.unexpected });
+                }
             }
             async componentDidMount() {
                 var D, h;
@@ -59562,24 +59611,12 @@
                             }) ]
                         })) ]
                     })), (0, A.jsxs)("div", Object.assign({
-                        className: "section section--devtools-info"
+                        className: "section section--footer"
                     }, {
-                        children: [ (0, A.jsx)("h2", Object.assign({
-                            className: "devtools-header"
+                        children: [ (0, A.jsxs)("span", Object.assign({
+                            className: "footer-note"
                         }, {
-                            children: (0, A.jsx)(f.LicenceStatus, {
-                                licence: this.props.licence,
-                                userName: this.props.userEmail,
-                                onLogin: this.props.onLogin
-                            })
-                        })), (0, A.jsxs)("span", Object.assign({
-                            className: "devtools-note"
-                        }, {
-                            children: [ (0, A.jsx)(s.LoginStatus, {
-                                userName: this.props.userEmail,
-                                licence: this.props.licence,
-                                onLogout: this.props.onLogout
-                            }), (0, A.jsx)(X.AdContainer, {}), "Support:", (0, A.jsx)("a", Object.assign({
+                            children: [ "Support:", (0, A.jsx)("a", Object.assign({
                                 href: "mailto:mrshahbaznns@gmail.com"
                             }, {
                                 children: "mrshahbaznns@gmail.com"
