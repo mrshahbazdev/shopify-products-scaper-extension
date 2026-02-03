@@ -59634,7 +59634,7 @@
                         })), (0, A.jsxs)("div", Object.assign({
                             className: "form-group"
                         }, {
-                            children: [ (0, A.jsx)("input", {
+                            children: [ (0, A.jsxs)("div", Object.assign({ className: "radio-option" }, { children: [ (0, A.jsx)("input", {
                                 type: "radio",
                                 id: "format_excel",
                                 name: "format",
@@ -59646,7 +59646,7 @@
                                 htmlFor: "format_excel"
                             }, {
                                 children: "Excel"
-                            })), (0, A.jsx)("input", {
+                            })) ]})), (0, A.jsxs)("div", Object.assign({ className: "radio-option" }, { children: [ (0, A.jsx)("input", {
                                 type: "radio",
                                 id: "format_csv",
                                 name: "format",
@@ -59658,7 +59658,7 @@
                                 htmlFor: "format_csv"
                             }, {
                                 children: "CSV"
-                            })), (0, A.jsx)("input", {
+                            })) ]})), (0, A.jsxs)("div", Object.assign({ className: "radio-option" }, { children: [ (0, A.jsx)("input", {
                                 type: "radio",
                                 id: "format_excel_legacy",
                                 name: "format",
@@ -59670,7 +59670,7 @@
                                 htmlFor: "format_excel_legacy"
                             }, {
                                 children: "Excel (legacy)"
-                            })) ]
+                            })) ]})) ]
                         })), (0, A.jsxs)("div", Object.assign({
                             className: "form-group"
                         }, {

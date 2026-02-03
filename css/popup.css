@@ -52,6 +52,12 @@ body {
   margin-bottom: 12px;
 }
 
+/* Ensure form-groups containing checkboxes are aligned */
+.form-group > div:not(.radio-option) {
+  display: flex;
+  align-items: center;
+}
+
 label {
   display: block;
   margin-bottom: 4px;
@@ -140,6 +146,10 @@ select:focus, input[type="text"]:focus {
   font-size: 13px;
 }
 
+.statusmsg:empty {
+  display: none;
+}
+
 .errormsg {
   color: var(--error-color);
   font-weight: 600;
@@ -169,18 +179,29 @@ select:focus, input[type="text"]:focus {
   color: var(--primary-color);
 }
 
-/* Checkbox styling */
+/* Checkbox and Radio styling */
 input[type="checkbox"], input[type="radio"] {
   accent-color: var(--primary-color);
   margin-right: 8px;
   width: 16px;
   height: 16px;
+  cursor: pointer;
 }
 
-.form-group > div {
+/* Fix for label alignment next to checkboxes/radios */
+input[type="checkbox"] + label,
+input[type="radio"] + label {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+/* Radio Option Group */
+.radio-option {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 /* Toolbar */
@@ -288,6 +309,9 @@ label.disabled {
   justify-content: center;
   align-items: center;
   min-height: 200px;
+  /* Ensure it fills if React hasn't loaded yet */
+  height: 100%;
+  width: 100%;
 }
 
 .loader {
