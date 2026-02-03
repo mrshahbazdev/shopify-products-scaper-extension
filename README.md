@@ -15,7 +15,16 @@ Website: http://jobspic.com
 3. Enable "Developer mode".
 4. Click "Load unpacked" and select the extension directory.
 
+## Features
+- **Unlimited Scraping**: Scrape as many products as you want, no limits.
+- **Scrape by Collections**: Organize products by collections and tag them for easy re-import.
+- **Slow Mode**: Extract detailed fields like barcodes and image alt texts.
+- **Image Download**: Download product images.
+- **Export Formats**: Support for CSV and Excel.
+
 ## Usage
 1. Go to any Shopify store.
 2. Open the extension popup.
-3. Click "Download products".
+3. Select "All Collections" or a specific collection.
+4. (Optional) Check "Scrape by Collections" to tag products with their collection name (useful for re-importing).
+5. Click "Download products".
