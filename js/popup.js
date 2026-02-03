@@ -59268,9 +59268,9 @@
                     error: null,
                     substatus: null
                 });
-                let j = [], F = [], l = [], Z = [], q = [];
+                let j = [ "Handle", "Title", "Body (HTML)", "Vendor", "Type", "Tags", "Published", "Option1 Name", "Option1 Value", "Option2 Name", "Option2 Value", "Option3 Name", "Option3 Value", "Variant SKU", "Variant Grams", "Variant Inventory Tracker", "Variant Inventory Qty", "Variant Inventory Policy", "Variant Fulfillment Service", "Variant Price", "Variant Compare At Price", "Variant Requires Shipping", "Variant Taxable", "Variant Barcode", "Image Src", "Image Position", "Image Alt Text", "Gift Card", "SEO Title", "SEO Description", "Variant Image", "Variant Weight Unit" ], F = [], l = [], Z = [], q = [14, 16, 19, 20];
                 const Q = this.state.outputFormat, I = this.state.storeSummary.domain, E = this.state.selectedCollectionHandle, X = true;
-                let f = 0, s = 0, P = 0, x = 0;
+                let f = 1, s = 0, P = 0, x = 0;
                 const w = 10, a = 10, d = 2;
                 while (true) {
                     const D = () => new Promise((D => {
@@ -59301,8 +59301,8 @@
                             error: null,
                             substatus: null
                         });
-                        let h = `https://api.shopify-spy.com/api/shopify/v2/products/${encodeURIComponent(I)}?flatten=true${Q != "excel_legacy" ? "&csv=1" : ""}&page=${f}`;
-                        if (E != "") h += `&collection=${E}`;
+                        let h = `${I}/products.json?limit=250&page=${f}`;
+                        if (E != "") h = `${I}/collections/${E}/products.json?limit=250&page=${f}`;
                         let z = null;
                         for (let D = 0; D < w; D += 1) {
                             try {
@@ -59329,30 +59329,55 @@
                             if (await D()) continue;
                             break;
                         }
-                        if (z.data.length === 0 && F.length === 0) return void this.setState({
-                            inProgress: false,
-                            statusText: `Stopped, found ${x} products`,
-                            error: n.empty,
-                            substatus: null
-                        });
-                        let A = z.data;
-                        if (j = z.columns, Z = z.column_types_date, q = z.number_indexes, this.state.slowMode && Q != "excel_legacy") A = await this.loadSlowModeData(A, I, j, x);
-                        if (F = F.concat(A), l = l.concat((0, L.parseImageUrls)(F, Q, j)), z.finish || !X) break;
+                        if (z.products.length === 0) {
+                            if (F.length === 0) {
+                                return void this.setState({
+                                    inProgress: false,
+                                    statusText: `Stopped, found ${x} products`,
+                                    error: n.empty,
+                                    substatus: null
+                                });
+                            }
+                            break;
+                        }
+
+                        let A = [];
+                        for(const p of z.products) {
+                            for(const v of p.variants) {
+                                let row = new Array(j.length).fill("");
+                                row[0] = p.handle; row[1] = p.title; row[2] = p.body_html; row[3] = p.vendor; row[4] = p.product_type;
+                                row[5] = Array.isArray(p.tags) ? p.tags.join(", ") : p.tags;
+                                row[6] = p.published_at ? "TRUE" : "FALSE";
+                                if(p.options[0]) { row[7] = p.options[0].name; row[8] = v.option1; }
+                                if(p.options[1]) { row[9] = p.options[1].name; row[10] = v.option2; }
+                                if(p.options[2]) { row[11] = p.options[2].name; row[12] = v.option3; }
+                                row[13] = v.sku; row[14] = v.grams; row[15] = v.inventory_management; row[16] = v.inventory_quantity;
+                                row[17] = v.inventory_policy; row[18] = v.fulfillment_service; row[19] = v.price; row[20] = v.compare_at_price;
+                                row[21] = v.requires_shipping?"TRUE":"FALSE"; row[22] = v.taxable?"TRUE":"FALSE"; row[23] = v.barcode;
+
+                                let img = (p.images && p.images.find(i => i.id === v.image_id));
+                                if (!img && p.images && p.images.length > 0) img = p.images[0];
+                                if(img) { row[24] = img.src; row[25] = img.position; row[26] = img.alt; row[30] = img.src; }
+                                row[31] = v.weight_unit;
+                                A.push(row);
+                            }
+                        }
+
+                        if (F = F.concat(A), l = l.concat((0, L.parseImageUrls)(A, Q, j)), false) break;
                         if (F.length > J) await this.saveToFile(X, Q, F, j, I, Z, q, `_part${P + 1}`), P += 1,
                         s += this.getProductCount(F, Q), F = [];
-                        x = this.getProductCount(F, Q) + s, await new Promise((D => setTimeout(D, 5e3))),
+                        x = this.getProductCount(F, Q) + s, await new Promise((D => setTimeout(D, 500))),
                         f += 1;
                     } catch (h) {
                         if (await D()) continue;
                         break;
                     }
                 }
-                if (!X) F = F.slice(0, 100), l = (0, L.parseImageUrls)(F, Q, j);
                 const H = P == 0 ? "" : `_part${P + 1}`;
                 await this.saveToFile(X, Q, F, j, I, Z, q, H), l = l.filter((D => !!D.src)), await ((z = (h = this.state).downloadCallback) === null || z === void 0 ? void 0 : z.call(h, l)),
                 this.setState({
                     inProgress: false,
-                    statusText: `Finished, found ${this.getProductCount(F, Q) + s} products${X ? "" : " (Free plan: only first 100 rows)"}`
+                    statusText: `Finished, found ${this.getProductCount(F, Q) + s} products`
                 });
             }
             render() {
