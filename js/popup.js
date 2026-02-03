@@ -59365,7 +59365,7 @@
                             if(p.options[1]) { row[9] = p.options[1].name; row[10] = v.option2; }
                             if(p.options[2]) { row[11] = p.options[2].name; row[12] = v.option3; }
                             row[13] = v.sku; row[14] = v.grams; row[15] = v.inventory_management; row[16] = v.inventory_quantity;
-                            row[17] = v.inventory_policy; row[18] = v.fulfillment_service; row[19] = v.price; row[20] = v.compare_at_price;
+                            row[17] = v.inventory_policy || "deny"; row[18] = v.fulfillment_service || "manual"; row[19] = v.price; row[20] = v.compare_at_price;
                             row[21] = v.requires_shipping?"TRUE":"FALSE"; row[22] = v.taxable?"TRUE":"FALSE"; row[23] = v.barcode;
 
                             let img = (p.images && p.images.find(i => i.id === v.image_id));
